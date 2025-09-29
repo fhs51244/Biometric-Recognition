@@ -1,0 +1,127 @@
+\documentclass[a4paper,12pt]{article}
+
+% Pakete
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel} % Deutsche Sprache
+\usepackage{graphicx} % Für Bilder
+\usepackage{amsmath} % Für mathematische Formeln
+\usepackage{booktabs} % Für Tabellen
+\usepackage[hidelinks]{hyperref} % Für Hyperlinks
+\usepackage{listings} % Für Code-Blöcke
+\usepackage{minted} % Auch für Code-Blöcke
+\usepackage{caption}
+\usepackage{menukeys}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepgfplotslibrary{groupplots}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{textcomp}
+\newcommand{\mytexttilde}{\raisebox{0.5ex}{\texttildelow}}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\fancyhf{} % löscht alle aktuellen Kopf- und Fußzeilen
+
+% Kopfzeile: linke Seite = aktuelle Section
+\fancyhead[L]{\nouppercase{\leftmark}}
+
+% Fußzeile: linke Seite = Name, rechte Seite = FH Salzburg, zentriert = Seitenzahl
+\fancyfoot[L]{Marc Toiflhart}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{FH Salzburg}
+
+\usepackage{placeins}
+
+\usepackage[
+backend=biber,
+style=ieee,
+sorting=ynt
+]{biblatex}
+
+\renewcommand{\listingscaption}{Quellcode}
+
+\addbibresource{literatur.bib}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \includegraphics[width=5cm]{Resources/logo-icon.png} \\[0.5cm] % Logo
+    FH Salzburg \\[0.2cm]
+    Informationstechnologie und Systemmanagement \\[1.5cm]
+    
+    \hrule
+    \vspace{0.4cm} % statt \\[0.4cm]
+    {\LARGE \textbf{Laborprotokoll}}
+    \vspace{0.4cm}
+    \hrule
+    \vspace{1.5cm} % statt \\[1.5cm]
+
+    {\Large \textbf{Medien-Technologie Labor}} \\[0.2cm]
+    {\Large Thema: Videokodierung} \\[1cm]
+    
+    \textbf{Autor:} Marc Toiflhart \\[0.2cm]
+    \textbf{Datum:} \today \\[0.2cm]
+    \textbf{Betreuer:} Dejan Radovanovic
+
+    \vfill
+\end{titlepage}
+\newpage
+
+\begin{center}
+    \textbf{Zusammenfassung}
+\end{center}
+In diesem Labor wurden Videosequenzen mit dem H.264-Codec unter variierenden Bitraten, Quantisierungsparametern und Presets kodiert und hinsichtlich Qualität und Kodierzeit analysiert. Ergänzend wurde ein C-Programm zur Einlesung und Verifikation von IYUV-Daten sowie zur Motion Estimation mit verschiedenen Metriken entwickelt.
+
+% Inhaltsverzeichnis
+\tableofcontents
+\newpage
+
+% Abbildungsverzeichnis
+\listoffigures
+\newpage
+
+% Tabellenverzeichnis
+\listoftables
+\newpage
+
+\captionsetup{type=listing}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
+#!/bin/bash
+bitrates=( 100 200 500 )
+
+if [ $# -ne 2 ]; then
+	echo "Usage: $0 <input_file> <output_dir>"
+	exit 1
+fi
+
+input_file=$1
+output_dir=$2
+
+mkdir -p "$output_dir"
+
+# Basisname ohne Dateiendung extrahieren
+base_name=$(basename "$input_file")
+base_name="${base_name%.*}"
+
+for bitrate in ${bitrates[@]}
+do
+	output_file="${output_dir}/${base_name}_${bitrate}.264"
+	x264 -o "$output_file" --input-res 352x288 --bitrate $bitrate "$input_file"
+done
+\end{minted}
+\captionof{listing}{Bash-Script zum Erzeugen der Videodateien unter x264 mit unterschiedlichen Bitraten}
+\label{lst:bashscript_x264_bitrates}
+\vspace{10pt}
+
+\newpage
+\printbibliography
+
+\end{document}
