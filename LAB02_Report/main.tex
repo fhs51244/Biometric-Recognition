@@ -96,34 +96,6 @@ In diesem Labor wurden Videosequenzen mit dem H.264-Codec unter variierenden Bit
 \listoftables
 \newpage
 
-\captionsetup{type=listing}
-\begin{minted}[linenos,tabsize=2,breaklines]{bash}
-#!/bin/bash
-bitrates=( 100 200 500 )
-
-if [ $# -ne 2 ]; then
-	echo "Usage: $0 <input_file> <output_dir>"
-	exit 1
-fi
-
-input_file=$1
-output_dir=$2
-
-mkdir -p "$output_dir"
-
-# Basisname ohne Dateiendung extrahieren
-base_name=$(basename "$input_file")
-base_name="${base_name%.*}"
-
-for bitrate in ${bitrates[@]}
-do
-	output_file="${output_dir}/${base_name}_${bitrate}.264"
-	x264 -o "$output_file" --input-res 352x288 --bitrate $bitrate "$input_file"
-done
-\end{minted}
-\captionof{listing}{Bash-Script zum Erzeugen der Videodateien unter x264 mit unterschiedlichen Bitraten}
-\label{lst:bashscript_x264_bitrates}
-\vspace{10pt}
 
 \newpage
 \printbibliography
