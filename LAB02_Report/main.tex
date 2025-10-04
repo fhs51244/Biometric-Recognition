@@ -94,6 +94,64 @@ Threshold values were analyzed to explore the trade-off between \textbf{security
 \centering
 \includegraphics[width=5cm]{Resources/rank_plot.eps} \\[0.5cm]
 
+\newpage
+\section{Measure hand properties}
+%Aufgabenstellung:
+Measure in each image provided, the hand geometry properties (finger’s length and width, palm width, etc.) according to the "measuring template" attached with the exercise. Use a ruler and measure in mm, e.g. 20 mm. You will then obtain four feature vectors E1, E2, E3 and E4, one for each image.
+
+
+\section{Identification exercise}
+
+\subsection{Calculating P(k) by hand}
+%Aufgabenstellung:
+Calculate by hand the function P (k) for k = 1, 2, ....P (k) indicates the chance (probability) that the correct identity is output in position k of IdLista. Draw the function P(k) that you calculated in a graph.
+
+\subsection{Calculating TPIR (M) and plotting CMC curve}
+%Aufgabenstellung:
+Calculate by hand the function TPIR (M) and draw it in a graph (the CMC curve). 
+TPIR (M) indicates the chance (probability) that the correct identity is output in the first M positions of the output list.  TPIR (M) is obtained by summing up P(k) up to k = M.
+Put also the values of P (k) and TPIR (M) in a table.
+
+
+\subsection{List Length for 90\% Identification Probability}
+%Aufgabenstellung:
+From TPIR (M), calculate the length of the list M to have a 90\% chance that the correct identity is obtained in IdLista among the first M identities.
+
+\subsection{Most and Least Similar IDs with Distances}
+%Aufgabenstellung:
+Find the two ID numbers that are the most and the least similar to your own ID. Also write down the distances of the two cases (how similar the hands are).
+
+
+\section{Verification exercise}
+
+\subsection{FAR and FRR Calculation from Genuine and Impostor Distances}
+%Aufgabenstellung:
+With the help of the histograms you created earlier and shown in Figure = 100 (Genuine class) and figure = 101 (Impostor class), calculate and plot the probability of the FA error (= FAR) and FR error (= FRR) for various thresholds. You can also work directly with the distances in the vectors ShDist (Genuine) and OhDist (Impostor). Create a table with different thresholds and the number of errors of each type.
+
+\subsection{FR Error Calculation and Threshold Variation}
+%Aufgabenstellung:
+A Matlab command that you can use to calculate the number of FR errors at a specific threshold Th is: sum (ShDist> Th). Vary the value of Th and annotate both Th and the number of FR errors in a table.
+
+
+\subsection{FRR Computation and Plotting vs. Threshold}
+%Aufgabenstellung:
+How can you compute the probability (Slh) from the number of FR errors, i.e. FRR? Calculate FRR for each value of Th and annotate the FRR in the table. Now you can plot the FRR for different values of the threshold Th! Use Matlab function plot for this purpose.
+
+\subsection{FAR Calculation for Impostor Class}
+%Aufgabenstellung:
+Create a similar table and graph of the class Impostor. Which is the Matlab command to compute FA errors using OhDist and Th?
+
+
+\subsection{FRR and FAR Tables and Figure}
+%Aufgabenstellung:
+Present the estimated errors (FRR and FAR for different values of Th) of the system in two tables and in a figure as Figure 6.
+
+\subsection{EER Estimation and Threshold Selection}
+%Aufgabenstellung:
+From your results, indicate the approximate value of the EER (Equal Error Rate). Suggest also suitable values of Th for: 1) high security requirement, and 2) high convenience requirement. Indicate the value of Th, FAR and FRR for every case 1) and 2).
+
+
+
 % Inhaltsverzeichnis
 \tableofcontents
 \newpage
