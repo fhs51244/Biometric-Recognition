@@ -11,6 +11,7 @@
 \usepackage{siunitx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
+\usepackage{minted}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{multicol}
@@ -67,89 +68,159 @@ Using \texttt{MinDistClassID('eucl',DB,TEST,id)}, we performed identification ov
     \item TPIR($M$): sum of $P(k)$ for $k \leq M$
 \end{itemize}
 
-\begin{table}[H]\centering
-\caption{Values for $P(k)$ and TPIR($M$)}
-\begin{tabular}{@{}ccc@{}}
-\toprule
-$k$ & $P(k)$ & TPIR($M$) \\
-\midrule
-1 & 0.75 & 0.75 \\
-2 & 0.12 & 0.87 \\
-3 & 0.06 & 0.93 \\
-4 & 0.03 & 0.96 \\
-5 & 0.01 & 0.97 \\
-6 & 0.01 & 0.98 \\
-7 & 0.01 & 0.99 \\
-8 & 0.01 & 1.00 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tables/pk_tpir_table.tex}
 
-\textbf{Answer to 3):} For 90\% correct ID retrieval, we require $M=2$.
+\subsection{TPIR(M) and the CMC Curve}
+
+The \textbf{Cumulative Match Characteristic (CMC)} curve visualizes the function $\mathrm{TPIR}(M)$ — the probability that the correct identity is found within the top $M$ matches.
+
+The resulting CMC curve is shown in \autoref{fig:cmc_curve}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/cmc_curve.eps}
+    \caption{Cumulative Match Characteristic (CMC) curve based on TPIR(M)}
+    \label{fig:cmc_curve}
+\end{figure}
+
+\vspace{0.5em}
+\noindent\textbf{Answer to 3):} To achieve at least 90\% probability that the correct identity is retrieved, we need a list length of $M=\input{../LAB02/values/M90.tex}$.
 
 \subsection{Most and Least Similar IDs}
 From the distance matrix \texttt{IdAvst}, we determined:
 \begin{itemize}[noitemsep]
-    \item \textbf{Most similar ID:} 1 (our own identity), distance = 2.21
-    \item \textbf{Least similar ID:} 17, distance = 9.84
+    \item \textbf{Most similar ID:} 1 (our own identity), distance = 4.42
+    \item \textbf{Least similar ID:} 4, distance = 33.13
 \end{itemize}
-
-\subsection{CMC Curve}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{figures/cmc_curve.eps}
-    \caption{CMC curve showing TPIR($M$) vs. rank}
-\end{figure}
 
 % Section 4 – Verification
 \section{Verification Evaluation}
 
-\subsection{FAR and FRR}
-Using \texttt{DistNew}, we obtained:
+\subsection{Distance Distributions}
+To analyze verification performance, we computed the distances:
 \begin{itemize}[noitemsep]
-    \item \texttt{ShDist} (genuine pairs)
-    \item \texttt{OhDist} (impostor pairs)
+    \item \textbf{Genuine comparisons} (\texttt{ShDist}): Between the same person in DB and TEST
+    \item \textbf{Impostor comparisons} (\texttt{OhDist}): Between different persons in DB and TEST
 \end{itemize}
-We computed FRR and FAR across thresholds:
 
-\begin{table}[H]\centering
-\caption{Error rates at selected thresholds}
-\begin{tabular}{@{}rrrr@{}}
+We plotted histograms of both distributions to visualize class separation:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/histograms.eps}
+    \caption{Histogram of distances: Genuine (blue) vs. Impostor (red)}
+    \label{fig:histograms}
+\end{figure}
+
+\subsection{FRR and FAR vs. Threshold}
+
+The threshold $\mathrm{Th}$ defines the boundary for accepting or rejecting a verification:
+\begin{itemize}[noitemsep]
+    \item \textbf{False Rejection Rate (FRR)}: \( \text{FRR} = \frac{\texttt{sum(ShDist > Th)}}{\texttt{numel(ShDist)}} \)
+    \item \textbf{False Acceptance Rate (FAR)}: \( \text{FAR} = \frac{\texttt{sum(OhDist $\le$ Th)}}{\texttt{numel(OhDist)}} \)
+\end{itemize}
+
+\noindent
+We evaluated both metrics for 200 evenly spaced thresholds between 0 and 15.
+
+The result is plotted in \autoref{fig:frr_far_curve}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/eer_plot.eps}
+    \caption{FRR and FAR as function of threshold. The intersection defines the Equal Error Rate (EER).}
+    \label{fig:frr_far_curve}
+\end{figure}
+
+\vspace{0.5em}
+\noindent
+\textbf{EER (Equal Error Rate)}: The error rates intersect at
+\[
+\text{Threshold} \approx \SI{5.73}{}, \quad \text{EER} \approx \SI{7.14}{\percent}
+\]
+
+This represents the operating point where FRR and FAR are balanced.
+
+\subsection{Raw FRR and FAR Data (Excerpt)}
+
+\begin{multicols}{2}
+\begin{table}[H]
+\centering
+\caption{FRR for selected thresholds}
+\begin{tabular}{@{}rrr@{}}
 \toprule
-Threshold & FRR & FAR & Total Errors \\
+Th & FR\# & FRR \\
 \midrule
-3.3 & 0.14 & 0.004 & 0.144 \\
-5.7 & 0.07 & 0.071 & \textbf{0.14} \\
-6.6 & 0.00 & 0.108 & 0.108 \\
+0.00 & 40 & 0.952 \\
+0.60 & 39 & 0.929 \\
+0.98 & 37 & 0.881 \\
+1.73 & 24 & 0.571 \\
+2.86 & 10 & 0.238 \\
+3.84 & 5  & 0.119 \\
+4.45 & 4  & 0.095 \\
+5.28 & 3  & 0.071 \\
+5.80 & 1  & 0.024 \\
+6.63 & 0  & 0.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{FRR/FAR Curves and EER}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{figures/eer_plot.eps}
-    \caption{FRR and FAR vs. threshold. Intersection = EER}
-\end{figure}
+\columnbreak
 
-\textbf{Equal Error Rate (EER):} ~\SI{7.1}{\percent} at threshold \SI{5.73}{}.
+\begin{table}[H]
+\centering
+\caption{FAR for selected thresholds}
+\begin{tabular}{@{}rrr@{}}
+\toprule
+Th & FA\# & FAR \\
+\midrule
+2.11 & 2   & 0.001 \\
+2.64 & 5   & 0.003 \\
+3.24 & 7   & 0.004 \\
+3.92 & 24  & 0.014 \\
+4.90 & 59  & 0.034 \\
+5.65 & 107 & 0.062 \\
+6.63 & 186 & 0.108 \\
+7.84 & 295 & 0.171 \\
+9.12 & 423 & 0.246 \\
+11.68 & 683 & 0.397 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{multicols}
+
+\noindent\textbf{Summary of key MATLAB commands:}
+\begin{itemize}
+    \item FR errors: \texttt{sum(ShDist > Th)}
+    \item FA errors: \texttt{sum(OhDist <= Th)}
+    \item FRR (Slh): \texttt{FRR = sum(ShDist > Th) / numel(ShDist)}
+    \item FAR (Slh): \texttt{FAR = sum(OhDist <= Th) / numel(OhDist)}
+\end{itemize}
 
 \subsection{Threshold Recommendations}
-\begin{itemize}
-    \item \textbf{High Security:} Threshold = 3.3, FAR $\approx$ 0.004, FRR = 0.14
-    \item \textbf{High Convenience:} Threshold = 6.6, FAR = 0.108, FRR = 0.00
-\end{itemize}
+
+We evaluated two operational scenarios based on system requirements:
+
+\begin{enumerate}[label=\textbf{\arabic*)}, itemsep=0.8em]
+    \item \textbf{High Security (minimize FAR)} \\
+    \quad Choose lowest threshold with FAR $\leq 1\%$:
+    \[
+    \text{Th} = \SI{3.32}{}, \quad \text{FAR} \approx \SI{0.46}{\percent}, \quad \text{FRR} \approx \SI{14.29}{\percent}
+    \]
+
+    \item \textbf{High Convenience (minimize FRR)} \\
+    \quad Choose highest threshold with FRR $\leq 1\%$:
+    \[
+    \text{Th} = \SI{6.63}{}, \quad \text{FAR} \approx \SI{10.8}{\percent}, \quad \text{FRR} = \SI{0.00}{\percent}
+    \]
+\end{enumerate}
+
+\subsection{Conclusion}
+
+This verification analysis illustrates the trade-off between false rejections and false acceptances. The EER at $\approx$5.73 balances both, but practical deployments must select a threshold based on the system's intended use case: high-security or high-convenience.
 
 % Section 5 – Discussion
 \section{Discussion}
 The system performed well for convenience-based applications, with a high TPIR(3) and low EER. However, for high-security scenarios, hand geometry alone may be insufficient due to moderate FAR. Consistency in hand measurement greatly affects system performance. Improvements could include additional features (e.g. finger contours) or multimodal fusion with fingerprint or face data.
-
-% Bibliography
-\vspace{1em}
-\noindent\textbf{References:}
-\begin{enumerate}[label={[R\arabic*]}]
-\item A. K. Jain, R. Bolle, and S. Pankanti, "A Prototype Hand Geometry-based Verification System", \emph{Pattern Recognition and Biometrics}, 1999.
-\item Course Lecture 2: "Errors in Biometric Systems – FAR, FRR, EER"
-\end{enumerate}
 
 \end{document}
