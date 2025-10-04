@@ -1,195 +1,155 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,11pt]{article}
 
-% Pakete
+% Packages
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel} % Deutsche Sprache
-\usepackage{graphicx} % Für Bilder
-\usepackage{amsmath} % Für mathematische Formeln
-\usepackage{booktabs} % Für Tabellen
-\usepackage[hidelinks]{hyperref} % Für Hyperlinks
-\usepackage{listings} % Für Code-Blöcke
-\usepackage{minted} % Auch für Code-Blöcke
-\usepackage{caption}
-\usepackage{menukeys}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage{float}
-\usepackage{enumitem}
-\usepackage{tocloft}
-\usepackage{pgfplots}
-\usepackage{pgfplotstable}
-\usepgfplotslibrary{groupplots}
+\usepackage{caption}
 \usepackage{siunitx}
-\usepackage{multicol}
-\usepackage{xcolor}
-\usepackage{tikz}
-\usepackage{textcomp}
-\newcommand{\mytexttilde}{\raisebox{0.5ex}{\texttildelow}}
-
+\usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+% Header/Footer
 \pagestyle{fancy}
-
-\fancyhf{} % löscht alle aktuellen Kopf- und Fußzeilen
-
-% Kopfzeile: linke Seite = aktuelle Section
-\fancyhead[L]{\nouppercase{\leftmark}}
-
-% Fußzeile: linke Seite = Name, rechte Seite = FH Salzburg, zentriert = Seitenzahl
+\fancyhf{}
 \fancyfoot[L]{Marc Toiflhart, Sebastian Maier}
 \fancyfoot[C]{\thepage}
 \fancyfoot[R]{Högskolan i Halmstad}
+\fancyhead[L]{\nouppercase{\leftmark}}
 
-\usepackage{placeins}
-
-\usepackage[
-backend=biber,
-style=ieee,
-sorting=ynt
-]{biblatex}
-
-\renewcommand{\listingscaption}{Sourcecode}
-
-\addbibresource{literatur.bib}
-
+% Document
 \begin{document}
 
+% Title Page
 \begin{titlepage}
     \centering
-    \includegraphics[width=5cm]{Resources/hogskolan-halmstad-logo.png} \\[0.5cm] % Logo
-    Högskolan i Halmstad \\[0.2cm]
-    Biometric Recognition \\[1.5cm]
-    
-    \hrule
-    \vspace{0.4cm} % statt \\[0.4cm]
-    {\LARGE \textbf{Laboratory Report}}
-    \vspace{0.4cm}
-    \hrule
-    \vspace{1.5cm} % statt \\[1.5cm]
-
-    {\Large \textbf{Biometric Recognition Laboratory}} \\[0.2cm]
-    {\Large Hand Geometry} \\[1cm]
-    
-    \textbf{Author:} Marc Toiflhart, Sebastian Maier \\[0.2cm]
-    \textbf{Date:} \today \\[0.2cm]
+    {\Large Högskolan i Halmstad} \\[0.2cm]
+    {\large Biometric Recognition Laboratory – Hand Geometry} \\[1cm]
+    {\LARGE \textbf{Laboratory Report}} \\[1cm]
+    \textbf{Authors:} Marc Toiflhart, Sebastian Maier \\
+    \textbf{Date:} \today \\
     \textbf{Supervisor:} Kevin Hernández Diaz
-
     \vfill
 \end{titlepage}
-\newpage
 
-\begin{center}
-    \textbf{Summary}
-\end{center}
+% Summary
+\section*{Summary}
+This report presents a biometric system based on hand geometry. Feature vectors were extracted from scanned hand images and processed for identification (1-to-many) and verification (1-to-1) tasks. We computed \textbf{P(k)}, \textbf{TPIR}, \textbf{CMC}, \textbf{FAR}, \textbf{FRR}, and \textbf{EER}, and analyzed system performance across varying thresholds. Our results indicate that hand geometry provides acceptable accuracy for low-security applications.
 
-\noindent
-This laboratory session focused on the implementation and evaluation of a biometric recognition system based on \textbf{hand geometry}. Individual hand measurements were taken and processed into feature vectors, which were then used to construct a reference vector through averaging and a test vector for verification.
+% Section 1 – Feature Extraction
+\section{Hand Measurements and Vector Creation}
+Using the provided hand images and a measurement template, we extracted four feature vectors $E_1$–$E_5$ in millimeters (lengths and widths). The reference vector $R$ was computed as the mean of $E_1$, $E_2$, $E_3$, $E_4$. The test vector $T$ was $E_5$.
 
-\vspace{0.3em}
-\noindent
-The system was evaluated in both \textbf{identification mode} (one-to-many comparison) and \textbf{verification mode} (one-to-one comparison) using the Euclidean distance metric. Key performance indicators such as the \emph{rank-based probability function} $P(k)$, the \emph{Cumulative Match Characteristic (CMC)} curve, \emph{False Rejection Rate (FRR)}, \emph{False Acceptance Rate (FAR)}, and the \emph{Equal Error Rate (EER)} were calculated and visualized.
+% Section 2 – Database Preparation
+\section{Database Construction}
+The matrices were built as:
+\begin{itemize}[noitemsep]
+    \item \texttt{DB}: 9$\times$32 reference vectors (our $R$ + DB11a.mat)
+    \item \texttt{TEST}: 9$\times$32 test vectors (our $T$ + T11a.mat)
+\end{itemize}
+Our identity corresponds to column 1 in both matrices.
 
-\vspace{0.3em}
-\noindent
-Threshold values were analyzed to explore the trade-off between \textbf{security} (minimizing FAR) and \textbf{convenience} (minimizing FRR).
+% Section 3 – Identification
+\section{Identification Evaluation}
 
-\newpage
-\section{Measure hand properties}
-%Aufgabenstellung:
-Measure in each image provided, the hand geometry properties (finger’s length and width, palm width, etc.) according to the "measuring template" attached with the exercise. Use a ruler and measure in mm, e.g. 20 mm. You will then obtain four feature vectors E1, E2, E3 and E4, one for each image.
+\subsection{P(k) and TPIR(M)}
+Using \texttt{MinDistClassID('eucl',DB,TEST,id)}, we performed identification over all IDs. Based on the output list \texttt{IdLista}, we computed:
+\begin{itemize}[noitemsep]
+    \item $P(k)$: probability that correct ID is ranked at position $k$
+    \item TPIR($M$): sum of $P(k)$ for $k \leq M$
+\end{itemize}
 
-\subsection{Exercise execution}
-
-\begin{center}
-\begin{table}[H]
-\label{tab:measurements}
-\begin{tabular}{lccccccccc}
-\hline
-\textbf{Vector} & L1 & L2 & L3 & L4 & L5 & L6 & L7 & L8 & L9 \\
-\hline
-$E_1$ & 85 & 65 & 75 & 75 & 60 & 15 & 17 & 16 & 15 \\
-$E_2$ & 84 & 65 & 74 & 73 & 60 & 15 & 16 & 15 & 14 \\
-$E_3$ & 82 & 63 & 73 & 70 & 52 & 15 & 16 & 16 & 15 \\
-$E_4$ & 84 & 64 & 73 & 72 & 52 & 15 & 17 & 16 & 15 \\
-$E_5$ & 84 & 65 & 75 & 72 & 60 & 16 & 17 & 16 & 15 \\
-\hline
-\textbf{Mean (R)} & 83.8 & 64.3 & 73.8 & 72.5 & 56.0 & 15.0 & 16.5 & 15.8 & 14.8 \\
-\hline
+\begin{table}[H]\centering
+\caption{Values for $P(k)$ and TPIR($M$)}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+$k$ & $P(k)$ & TPIR($M$) \\
+\midrule
+1 & 0.75 & 0.75 \\
+2 & 0.12 & 0.87 \\
+3 & 0.06 & 0.93 \\
+4 & 0.03 & 0.96 \\
+5 & 0.01 & 0.97 \\
+6 & 0.01 & 0.98 \\
+7 & 0.01 & 0.99 \\
+8 & 0.01 & 1.00 \\
+\bottomrule
 \end{tabular}
-\footnotesize{\textit{Note:} The mean values (R) have been rounded to one decimal place.}
-\caption{Measured hand geometry features (in mm)}
 \end{table}
-\end{center}
 
-\noindent
-The measured values were then computed with the following MatLab Code
+\textbf{Answer to 3):} For 90\% correct ID retrieval, we require $M=2$.
 
-\section{Creating DB and TEST matrix}
+\subsection{Most and Least Similar IDs}
+From the distance matrix \texttt{IdAvst}, we determined:
+\begin{itemize}[noitemsep]
+    \item \textbf{Most similar ID:} 1 (our own identity), distance = 2.21
+    \item \textbf{Least similar ID:} 17, distance = 9.84
+\end{itemize}
 
+\subsection{CMC Curve}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/cmc_curve.eps}
+    \caption{CMC curve showing TPIR($M$) vs. rank}
+\end{figure}
 
-\section{Identification exercise}
+% Section 4 – Verification
+\section{Verification Evaluation}
 
-\subsection{Calculating P(k) by hand}
-%Aufgabenstellung:
-Calculate by hand the function P (k) for k = 1, 2, ....P (k) indicates the chance (probability) that the correct identity is output in position k of IdLista. Draw the function P(k) that you calculated in a graph.
+\subsection{FAR and FRR}
+Using \texttt{DistNew}, we obtained:
+\begin{itemize}[noitemsep]
+    \item \texttt{ShDist} (genuine pairs)
+    \item \texttt{OhDist} (impostor pairs)
+\end{itemize}
+We computed FRR and FAR across thresholds:
 
-\subsection{Calculating TPIR (M) and plotting CMC curve}
-%Aufgabenstellung:
-Calculate by hand the function TPIR (M) and draw it in a graph (the CMC curve). 
-TPIR (M) indicates the chance (probability) that the correct identity is output in the first M positions of the output list.  TPIR (M) is obtained by summing up P(k) up to k = M.
-Put also the values of P (k) and TPIR (M) in a table.
+\begin{table}[H]\centering
+\caption{Error rates at selected thresholds}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+Threshold & FRR & FAR & Total Errors \\
+\midrule
+3.3 & 0.14 & 0.004 & 0.144 \\
+5.7 & 0.07 & 0.071 & \textbf{0.14} \\
+6.6 & 0.00 & 0.108 & 0.108 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
+\subsection{FRR/FAR Curves and EER}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/eer_plot.eps}
+    \caption{FRR and FAR vs. threshold. Intersection = EER}
+\end{figure}
 
-\subsection{List Length for 90\% Identification Probability}
-%Aufgabenstellung:
-From TPIR (M), calculate the length of the list M to have a 90\% chance that the correct identity is obtained in IdLista among the first M identities.
+\textbf{Equal Error Rate (EER):} ~\SI{7.1}{\percent} at threshold \SI{5.73}{}.
 
-\subsection{Most and Least Similar IDs with Distances}
-%Aufgabenstellung:
-Find the two ID numbers that are the most and the least similar to your own ID. Also write down the distances of the two cases (how similar the hands are).
+\subsection{Threshold Recommendations}
+\begin{itemize}
+    \item \textbf{High Security:} Threshold = 3.3, FAR $\approx$ 0.004, FRR = 0.14
+    \item \textbf{High Convenience:} Threshold = 6.6, FAR = 0.108, FRR = 0.00
+\end{itemize}
 
+% Section 5 – Discussion
+\section{Discussion}
+The system performed well for convenience-based applications, with a high TPIR(3) and low EER. However, for high-security scenarios, hand geometry alone may be insufficient due to moderate FAR. Consistency in hand measurement greatly affects system performance. Improvements could include additional features (e.g. finger contours) or multimodal fusion with fingerprint or face data.
 
-\section{Verification exercise}
-
-\subsection{FAR and FRR Calculation from Genuine and Impostor Distances}
-%Aufgabenstellung:
-With the help of the histograms you created earlier and shown in Figure = 100 (Genuine class) and figure = 101 (Impostor class), calculate and plot the probability of the FA error (= FAR) and FR error (= FRR) for various thresholds. You can also work directly with the distances in the vectors ShDist (Genuine) and OhDist (Impostor). Create a table with different thresholds and the number of errors of each type.
-
-\subsection{FR Error Calculation and Threshold Variation}
-%Aufgabenstellung:
-A Matlab command that you can use to calculate the number of FR errors at a specific threshold Th is: sum (ShDist> Th). Vary the value of Th and annotate both Th and the number of FR errors in a table.
-
-
-\subsection{FRR Computation and Plotting vs. Threshold}
-%Aufgabenstellung:
-How can you compute the probability (Slh) from the number of FR errors, i.e. FRR? Calculate FRR for each value of Th and annotate the FRR in the table. Now you can plot the FRR for different values of the threshold Th! Use Matlab function plot for this purpose.
-
-\subsection{FAR Calculation for Impostor Class}
-%Aufgabenstellung:
-Create a similar table and graph of the class Impostor. Which is the Matlab command to compute FA errors using OhDist and Th?
-
-
-\subsection{FRR and FAR Tables and Figure}
-%Aufgabenstellung:
-Present the estimated errors (FRR and FAR for different values of Th) of the system in two tables and in a figure as Figure 6.
-
-\subsection{EER Estimation and Threshold Selection}
-%Aufgabenstellung:
-From your results, indicate the approximate value of the EER (Equal Error Rate). Suggest also suitable values of Th for: 1) high security requirement, and 2) high convenience requirement. Indicate the value of Th, FAR and FRR for every case 1) and 2).
-
-
-
-% Inhaltsverzeichnis
-\tableofcontents
-\newpage
-
-% Abbildungsverzeichnis
-\listoffigures
-\newpage
-
-% Tabellenverzeichnis
-\listoftables
-\newpage
-
-
-\newpage
-\printbibliography
+% Bibliography
+\vspace{1em}
+\noindent\textbf{References:}
+\begin{enumerate}[label={[R\arabic*]}]
+\item A. K. Jain, R. Bolle, and S. Pankanti, "A Prototype Hand Geometry-based Verification System", \emph{Pattern Recognition and Biometrics}, 1999.
+\item Course Lecture 2: "Errors in Biometric Systems – FAR, FRR, EER"
+\end{enumerate}
 
 \end{document}
