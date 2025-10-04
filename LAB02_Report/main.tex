@@ -2,7 +2,7 @@
 
 % Pakete
 \usepackage[utf8]{inputenc}
-\usepackage[ngerman]{babel} % Deutsche Sprache
+\usepackage[english]{babel} % Deutsche Sprache
 \usepackage{graphicx} % Für Bilder
 \usepackage{amsmath} % Für mathematische Formeln
 \usepackage{booktabs} % Für Tabellen
@@ -33,9 +33,9 @@
 \fancyhead[L]{\nouppercase{\leftmark}}
 
 % Fußzeile: linke Seite = Name, rechte Seite = FH Salzburg, zentriert = Seitenzahl
-\fancyfoot[L]{Marc Toiflhart}
+\fancyfoot[L]{Marc Toiflhart, Sebastian Maier}
 \fancyfoot[C]{\thepage}
-\fancyfoot[R]{FH Salzburg}
+\fancyfoot[R]{Högskolan i Halmstad}
 
 \usepackage{placeins}
 
@@ -45,7 +45,7 @@ style=ieee,
 sorting=ynt
 ]{biblatex}
 
-\renewcommand{\listingscaption}{Quellcode}
+\renewcommand{\listingscaption}{Sourcecode}
 
 \addbibresource{literatur.bib}
 
@@ -53,32 +53,36 @@ sorting=ynt
 
 \begin{titlepage}
     \centering
-    \includegraphics[width=5cm]{Resources/logo-icon.png} \\[0.5cm] % Logo
-    FH Salzburg \\[0.2cm]
-    Informationstechnologie und Systemmanagement \\[1.5cm]
+    \includegraphics[width=5cm]{Resources/hogskolan-halmstad-logo.png} \\[0.5cm] % Logo
+    Högskolan i Halmstad \\[0.2cm]
+    Biometric Recognition \\[1.5cm]
     
     \hrule
     \vspace{0.4cm} % statt \\[0.4cm]
-    {\LARGE \textbf{Laborprotokoll}}
+    {\LARGE \textbf{Laboratory Report}}
     \vspace{0.4cm}
     \hrule
     \vspace{1.5cm} % statt \\[1.5cm]
 
-    {\Large \textbf{Medien-Technologie Labor}} \\[0.2cm]
-    {\Large Thema: Videokodierung} \\[1cm]
+    {\Large \textbf{Biometric Recognition Laboratory}} \\[0.2cm]
+    {\Large Hand Geometry} \\[1cm]
     
-    \textbf{Autor:} Marc Toiflhart \\[0.2cm]
-    \textbf{Datum:} \today \\[0.2cm]
-    \textbf{Betreuer:} Dejan Radovanovic
+    \textbf{Author:} Marc Toiflhart, Sebastian Maier \\[0.2cm]
+    \textbf{Date:} \today \\[0.2cm]
+    \textbf{Supervisor:} Kevin Hernández Diaz
 
     \vfill
 \end{titlepage}
 \newpage
 
 \begin{center}
-    \textbf{Zusammenfassung}
+    \textbf{Summary}
 \end{center}
 In diesem Labor wurden Videosequenzen mit dem H.264-Codec unter variierenden Bitraten, Quantisierungsparametern und Presets kodiert und hinsichtlich Qualität und Kodierzeit analysiert. Ergänzend wurde ein C-Programm zur Einlesung und Verifikation von IYUV-Daten sowie zur Motion Estimation mit verschiedenen Metriken entwickelt.
+
+\vspace{0.4cm} % statt \\[0.4cm]
+\centering
+\includegraphics[width=5cm]{Resources/rank_plot.eps} \\[0.5cm]
 
 % Inhaltsverzeichnis
 \tableofcontents
