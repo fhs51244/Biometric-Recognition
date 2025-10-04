@@ -78,7 +78,17 @@ sorting=ynt
 \begin{center}
     \textbf{Summary}
 \end{center}
-In diesem Labor wurden Videosequenzen mit dem H.264-Codec unter variierenden Bitraten, Quantisierungsparametern und Presets kodiert und hinsichtlich Qualität und Kodierzeit analysiert. Ergänzend wurde ein C-Programm zur Einlesung und Verifikation von IYUV-Daten sowie zur Motion Estimation mit verschiedenen Metriken entwickelt.
+
+\noindent
+This laboratory session focused on the implementation and evaluation of a biometric recognition system based on \textbf{hand geometry}. Individual hand measurements were taken and processed into feature vectors, which were then used to construct a reference vector through averaging and a test vector for verification.
+
+\vspace{0.3em}
+\noindent
+The system was evaluated in both \textbf{identification mode} (one-to-many comparison) and \textbf{verification mode} (one-to-one comparison) using the Euclidean distance metric. Key performance indicators such as the \emph{rank-based probability function} $P(k)$, the \emph{Cumulative Match Characteristic (CMC)} curve, \emph{False Rejection Rate (FRR)}, \emph{False Acceptance Rate (FAR)}, and the \emph{Equal Error Rate (EER)} were calculated and visualized.
+
+\vspace{0.3em}
+\noindent
+Threshold values were analyzed to explore the trade-off between \textbf{security} (minimizing FAR) and \textbf{convenience} (minimizing FRR).
 
 \newpage
 \section{Measure hand properties}
