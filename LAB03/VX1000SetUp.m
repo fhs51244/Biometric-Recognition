@@ -5,7 +5,7 @@ clear all
 
 % Create video input object. 
 %vid = videoinput('winvideo',1,'RGB24_320x240');
-vid = videoinput('winvideo',1,'YUY2_640x480');
+vid = videoinput('macvideo',1,'YCbCr422_320x240');
 
 % Set video input object properties for this application.
 vid.FramesPerTrigger = Inf; %continous capturing

@@ -8,7 +8,7 @@ VX1000SetUp; %configure the web cam
 %hsobel=fspecial('sobel');
 
 %create a smoothing gaussian filter with:
-s=5;
+s=1.4;
 hsobel=fspecial('gaussian',2*round(3*s)+1,s);
 
 % Create a figure window.
