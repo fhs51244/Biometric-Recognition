@@ -1,0 +1,86 @@
+\documentclass[a4paper,11pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[frozencache,cachedir=_minted-cache]{minted}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{Marc Toiflhart, Sebastian Maier}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{Högskolan i Halmstad}
+\fancyhead[L]{\nouppercase{\leftmark}}
+
+% Document
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \includegraphics[width=5cm]{Resources/hogskolan-halmstad-logo.png}\\[0.5cm]
+    Högskolan i Halmstad \\[0.2cm]
+    Biometric Recognition Laboratory – Fingerprint \\[1.5cm]
+    
+    \hrule
+    \vspace{0.4cm}
+    {\LARGE \textbf{Report}}\\[0.2cm]
+    \textbf{Fingerprint Recognition}\\[0.2cm]
+    \hrule
+    \vspace{1.2cm}
+
+    \textbf{Authors:} Marc Toiflhart, Sebastian Maier\\[0.3cm]
+    \textbf{Supervisor:} Kevin Hernández Diaz\\[0.3cm]
+    \textbf{Date:} \today
+    \vfill
+\end{titlepage}
+\newpage
+
+% Summary
+\section*{Summary}
+In this lab we worked with fingerprint images and studied how biometrics systems detect special points in fingerprints. We learned about ridge and valley structure, image quality, and enhancement techniques. We also tested a detection algorithm in MATLAB and checked how filtering and interpolation improve the fingerprint image. At the end, we calculated pixel values by hand to better understand the enhancement process.
+
+% Exercise 1
+\section{Exercise 1}
+\textbf{Introduction:}  
+In this exercise we run the fingerprint detection algorithm and analyse the ridge width and the quality of different fingerprint areas. We also identify parts where the quality is low.
+
+\subsection{How much width (in mm) has a ridge/valley in a human fingerprint?}
+
+\subsection{How would you describe an area of poor quality of a fingerprint?}
+
+\subsection{Indicate the parts of the fingerprint that has poor quality}
+
+% Exercise 2
+\section{Exercise 2}
+\textbf{Introduction:}  
+Here we activate fingerprint image enhancement and compare the detected points before and after the enhancement. We also study how the enhancement algorithm works.
+
+\subsection{Was enhancement of the fingerprint successful?}
+
+\subsection{Find out and explain how the enhancement algorithm works}
+
+% Exercise 3
+\section{Exercise 3}
+\textbf{Introduction:}  
+In this exercise we focus on the linear interpolation step. We choose pixels and compare the enhanced value with the filtered images to understand the weights and interpolation.
+
+\subsection{Computation by code}
+
+\subsection{Calculation by hand}
+
+\end{document}
