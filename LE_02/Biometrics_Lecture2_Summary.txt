@@ -1,0 +1,112 @@
+Lecture 2 — Biometric Systems, Working Modes, Performance & Errors
+
+------------------------------------------------------------
+Structure of Biometric Systems (slides 4–9)
+
+Main parts/modules:
+1. Sensor (Data Acquisition)
+   - Captures the biometric trait and converts it into a digital signal.
+   - Critical: Sensor quality determines overall system performance.
+
+2. Pre-processor
+   - Cleans and enhances the raw signal (noise reduction, normalization, etc.).
+
+3. Feature Extractor
+   - Computes a compact feature vector (salient and unique characteristics).
+
+4. Template Database
+   - Stores enrolled users’ templates securely.
+   - Centralized or local storage, may be periodically updated.
+
+5. Matcher / Decision Module
+   - Compares the input features with stored templates and outputs a similarity or distance score.
+   - Decision made by comparing score to a threshold T.
+
+Enrolment vs. Authentication:
+- Enrolment: capture, extract and store the template.
+- Authentication: capture, extract, compare with template, decide based on threshold.
+
+------------------------------------------------------------
+Working Modes of Biometric Systems (slides 11–15)
+
+Verification (1:1)
+- Question: "Are you who you claim to be?"
+- User claims identity, system compares input with claimed template only.
+- Decision: Accept if score > T (similarity score).
+
+Identification (1:N)
+- Question: "Who is this person?"
+- No claimed identity. System compares input against all templates and ranks by similarity.
+
+Identification (1:N+1)
+- Question: "Is this person in my database?"
+- Adds a threshold to decide if user is unknown.
+
+------------------------------------------------------------
+Performance — Verification Mode (slides 19–29)
+
+Two main errors:
+1. False Rejection Rate (FRR): genuine user incorrectly rejected.
+   FRR(T) = P_G(s < T)
+2. False Acceptance Rate (FAR): impostor incorrectly accepted.
+   FAR(T) = P_I(s > T)
+
+Performance evaluation steps:
+- Compute histograms of genuine and impostor scores.
+- Calculate FAR/FRR for various thresholds.
+- Plot FAR vs. FRR → DET or ROC curve.
+- Equal Error Rate (EER): point where FAR = FRR.
+
+Error implications:
+- FAR affects impostors (security risk).
+- FRR affects genuine users (inconvenience).
+
+Threshold trade-off:
+- High security → minimize FAR (increase T).
+- High convenience → minimize FRR (decrease T).
+
+Similarity vs Distance scores:
+- Similarity: higher = more similar, Accept if s > T.
+- Distance: lower = more similar, Accept if s < T.
+
+------------------------------------------------------------
+Performance — Identification Mode (slides 30–37)
+
+1:N (Closed Set)
+- Each probe is compared to all N templates.
+- TPIR (True Positive Identification Rate): probability correct ID is in top M candidates.
+- CMC (Cumulative Match Characteristic) curve: plots TPIR vs rank M.
+
+1:N+1 (Open Set)
+- Adds threshold to reject unknown individuals.
+- TPIR(T): correct ID in top M above threshold.
+- FPIR(T): probability unknown person matches above threshold.
+
+Impact of database size N:
+- Larger N increases chance of confusion (higher errors).
+- Identification unsuitable when very low FAR required (high security).
+
+------------------------------------------------------------
+Other Performance Considerations (slides 40–41)
+
+Failure to Acquire (FTA)
+- Sensor cannot capture biometric sample (occluded, missing, etc.).
+
+Failure to Enroll (FTE)
+- Sample captured but no valid template generated (low quality).
+
+Impact:
+- Excluding low-quality data can falsely improve FAR/FRR results.
+
+------------------------------------------------------------
+Summary Table
+
+Aspect | Key Points
+--------|------------
+Structure | Sensor → Preprocessing → Feature Extraction → Database → Matcher
+Enrolment vs Authentication | Store vs Compare templates
+Modes | Verification (1:1), Identification (1:N / 1:N+1)
+Verification Metrics | FAR, FRR, EER, DET
+Identification Metrics | TPIR, CMC, FPIR
+Other Errors | FTA, FTE
+Trade-off | High security = low FAR ↑T / High convenience = low FRR ↓T
